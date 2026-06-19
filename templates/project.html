@@ -3,160 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bike Price Prediction</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<style>
-    body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
-}
+    <title>Loan Approval Prediction System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a12;
+            --panel-bg: rgba(18, 18, 32, 0.75);
+            --neon-cyan: #00f3ff;
+            --neon-magenta: #ff0055;
+            --text-color: #e2e8f0;
+            --border-glow: rgba(0, 243, 255, 0.2);
+        }
 
-header {
-    background-color: #f0f0f0;
-    padding: 20px;
-   
-    text-align: center;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-h1 {
-    font-size: 2em;
-}
-
-main {
-    padding: 20px;
-    width: 50%;
-    margin: 0 auto;
-}
-
-section {
-    margin-bottom: 20px;
-}
-
-.description {
-    text-align: center;
-}
-
-.form-container {
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-.form-container label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.form-container input,
-.form-container select,
-.form-container textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    margin-bottom: 15px;
-}
-
-.form-container button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.form-container button:hover {
-    background-color: #3e8e41;
-}
-
-.disclaimer {
-    font-size: 0
-}
-.Prediction{
-            width: 100vw;
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-}
-</style>
+            align-items: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(0, 243, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(255, 0, 85, 0.1) 0px, transparent 50%);
+        }
+
+        /* Matrix-like subtle scanlines */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 99999;
+            opacity: 0.4;
+            pointer-events: none;
+            background-size: 100% 4px, 6px 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.3));
+            animation: glitch 3s infinite;
+        }
+
+        main {
+            width: 100%;
+            max-width: 550px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .description {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .description h2 {
+            font-size: 1.4rem;
+            color: var(--neon-cyan);
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .description p {
+            color: #8a8aa3;
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            position: relative;
+        }
+
+        /* Decorative UI corners */
+        .form-container::before, .form-container::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid var(--neon-magenta);
+        }
+        .form-container::before { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+        .form-container::after { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .form-container label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: #aaaae0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            transition: 0.3s ease;
+        }
+
+        .form-container input {
+            width: 100%;
+            background: rgba(8, 8, 16, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px 16px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .form-container input:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3), inset 0 0 8px rgba(0, 243, 255, 0.1);
+        }
+
+        /* Shift label color on focus */
+        .input-group:focus-within label {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
+        }
+
+        .btn-wrapper {
+            position: relative;
+            margin-top: 35px;
+        }
+
+        .form-container button {
+            width: 100%;
+            background: linear-gradient(90deg, #00f3ff, #0077ff);
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 243, 255, 0.4);
+        }
+
+        .form-container button:hover {
+            background: linear-gradient(90deg, #ff0055, #990033);
+            color: #fff;
+            box-shadow: 0 4px 25px rgba(255, 0, 85, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .form-container button:active {
+            transform: translateY(1px);
+        }
+
+        .Prediction {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 550px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .result-box {
+            background: rgba(255, 0, 85, 0.05);
+            border: 1px dashed var(--neon-magenta);
+            padding: 20px;
+            border-radius: 12px;
+            display: inline-block;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.1);
+            animation: pulse 2s infinite alternate;
+        }
+
+        .Prediction h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .prediction-value {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+            font-weight: 700;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            from { box-shadow: 0 0 15px rgba(255, 0, 85, 0.1); }
+            to { box-shadow: 0 0 25px rgba(255, 0, 85, 0.3); border-color: var(--neon-cyan); }
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: none; }
+            92% { transform: skew(-1deg); }
+            94% { transform: skew(1deg); }
+            96% { transform: skew(-2deg); }
+            98% { transform: skew(2deg); }
+        }
+
+        /* Custom Scrollbar for the vibe */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #22223b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-cyan);
+        }
+    </style>
+</head>
 <body>
+
     <header>
-        <h1>Bike Price Prediction</h1>
+        <h1>Loan Approval Prediction System</h1>
     </header>
+
     <main>
         <section class="description">
-            <h2>Welcome to the Bike Price Prediction Tool!</h2>
-            <p>This website helps you estimate the value of your used bike based on various factors.</p>
+            <h2>System Protocol: Loan Evaluation</h2>
+            <p>Input economic metrics to assess approval vector probabilities.</p>
         </section>
+
         <section class="form-container">
-            <h3>Enter Bike Details</h3>
-<form action="{{ url_for('predict') }}" method="post">
-            
-                <label for="brand">Brand:</label>
-                <select name="brand_name" id="fifth" required="required">
+            <form action="{{ url_for('predict') }}" method="post">
+                
+                <div class="input-group">
+                    <label for="income">Annual Income :</label>
+                    <input type="number" id="income" name="income" placeholder="e.g., 50000" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="credit_score">Credit Score (300 - 850) :</label>
+                    <input type="number" id="credit_score" name="credit_score" min="300" max="850" placeholder="e.g., 720" required>
+                </div>
 
-                        <option value="Royal Enfield" >Royal Enfield</option>
-                        <option value="KTM">KTM</option>
-                        <option value="Bajaj">Bajaj</option>
-                        <option value="Harley">Harley-Davidson</option>
-                        <option value="Yamaha">Yamaha</option>
-                        <option value="Honda">Honda</option>
-                        <option value="Suzuki">Suzuki</option>
-                        <option value="TVS">TVS</option>
-                        <option value="Kawasaki">Kawasaki</option>
-                        <option value="Hyosung">Hyosung</option>
-                        <option value="Benelli">Benelli</option>
-                        <option value="Mahindra">Mahindra</option>
-                        <option value="Triumph">Triumph</option>
-                        <option value="Ducati">Ducati</option>
-                        <option value="BMW">BMW</option>
-                        <option value="Rajdoot">Rajdoot</option>
-                        <option value="Indian">Indian</option>
-                        <option value="LML">LML</option>
-                        <option value="Yezdi">Yezdi</option>
-                        <option value="MV">MV</option>
-                        <option value="Ideal">Ideal</option>
-        </select><br><br>
+                <div class="input-group">
+                    <label for="loan_amount">Requested Amount :</label>
+                    <input type="number" id="loan_amount" name="loan_amount" placeholder="e.g., 15000" required>
+                </div>
                 
-                <label for="owner">owner:</label>
-                <select name="owner" id="fifth" required="required">
-                <option value="1">first owner</option>
-                <option value="2">second owner</option>
-                <option value="3">third owner</option>
-                <option value="4">fourth owner</option>
-        </select><br><br>
-            
+                <div class="input-group">
+                    <label for="years_employed">Employment Duration (Years) :</label>
+                    <input type="number" id="years_employed" name="years_employed" min="0" max="70" placeholder="e.g., 5" required>
+                </div>
                 
-                <label for="age">age:</label>
-                <input type="text" name = 'age' required>
-                
-                <br><br>
-                <label for="power">power:</label>
-                <input type="text" name = 'power' required>
-<br><br>
-
-
-                <label for="">kms_driven</label>
-                <input type="text" name ="kms_driven"required>
-                <br><br>
-                </select>
-                
-                <button type="submit">Predict Price</button>
+                <div class="btn-wrapper">
+                    <button type="submit">Analyze Risk Profile</button>
+                </div>
             </form>
-            <!-- <p class="disclaimer">**Disclaimer:** This is a basic website for demonstration purposes only. A real prediction model would require additional features and machine learning integration.</p>
-        </section> -->
-        <!-- <section class="results">
-            <h2>Predicted Price</h2>
-            <p id="predicted-price">**This is where the predicted price will be displayed.**</p>
-        </section> -->
+        </section>
     </main>
+
+    {% if prediction %}
     <div class="Prediction">
-    <h2>Bike Price is : {{ prediction }}</h2>
-</div>
-    <footer>
-        <!-- <p>&copy;2024 Bike Price Prediction</p> -->
-    </footer>
+        <div class="result-box">
+            <h2>Evaluation Result: <span class="prediction-value">{{ prediction }}</span></h2>
+        </div>
+    </div>
+    {% endif %}
+
 </body>
 </html>
